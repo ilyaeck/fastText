@@ -7,9 +7,11 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#ifndef ARGS_H
-#define ARGS_H
+#ifndef FASTTEXT_ARGS_H
+#define FASTTEXT_ARGS_H
 
+#include <istream>
+#include <ostream>
 #include <string>
 
 enum class model_name : int {cbow=1, sg, sup}; // Is this a CBOW, SkipGram or a supervised model?
@@ -22,6 +24,7 @@ class Args {
     std::string test;
     std::string output;
     double lr;
+    int lrUpdateRate;
     int dim;
     int ws;
     int epoch;
@@ -34,14 +37,14 @@ class Args {
     int minn;
     int maxn;
     int thread;
-    int verbose;
     double t;
     std::string label;
+    int verbose;
 
     void parseArgs(int, char**);
     void printHelp();
-    void save(std::ofstream&);
-    void load(std::ifstream&);
+    void save(std::ostream&);
+    void load(std::istream&);
 };
 
 #endif

@@ -7,11 +7,13 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef FASTTEXT_MATRIX_H
+#define FASTTEXT_MATRIX_H
 
 #include <cstdint>
-#include <fstream>
+#include <istream>
+#include <ostream>
+
 #include "real.h"
 
 class Vector;
@@ -34,8 +36,8 @@ class Matrix {
     real dotRow(const Vector&, int64_t);
     void addRow(const Vector&, int64_t, real);
 
-    void save(std::ofstream&);
-    void load(std::ifstream&);
+    void save(std::ostream&);
+    void load(std::istream&);
 };
 
 #endif

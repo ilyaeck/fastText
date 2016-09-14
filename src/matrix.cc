@@ -8,8 +8,11 @@
  */
 
 #include "matrix.h"
+
 #include <assert.h>
+
 #include <random>
+
 #include "utils.h"
 #include "vector.h"
 
@@ -62,14 +65,18 @@ void Matrix::uniform(real a) {
 
 // Add 'vec' scaled by 'a' to row 'i'
 void Matrix::addRow(const Vector& vec, int64_t i, real a) {
-  assert(i >= 0 && i < m_ && vec.m_ == n_);
+  assert(i >= 0);
+  assert(i < m_);
+  assert(vec.m_ == n_);
   for (int64_t j = 0; j < n_; j++) {
     data_[i * n_ + j] += a * vec.data_[j];
   }
 }
 
 real Matrix::dotRow(const Vector& vec, int64_t i) {
-  assert(i >= 0 && i < m_ && vec.m_ == n_);
+  assert(i >= 0);
+  assert(i < m_);
+  assert(vec.m_ == n_);
   real d = 0.0;
   for (int64_t j = 0; j < n_; j++) {
     d += data_[i * n_ + j] * vec.data_[j];
@@ -77,16 +84,16 @@ real Matrix::dotRow(const Vector& vec, int64_t i) {
   return d;
 }
 
-void Matrix::save(std::ofstream& ofs) {
-  ofs.write((char*) &m_, sizeof(int64_t));
-  ofs.write((char*) &n_, sizeof(int64_t));
-  ofs.write((char*) data_, m_ * n_ * sizeof(real));
+void Matrix::save(std::ostream& out) {
+  out.write((char*) &m_, sizeof(int64_t));
+  out.write((char*) &n_, sizeof(int64_t));
+  out.write((char*) data_, m_ * n_ * sizeof(real));
 }
 
-void Matrix::load(std::ifstream& ifs) {
-  ifs.read((char*) &m_, sizeof(int64_t));
-  ifs.read((char*) &n_, sizeof(int64_t));
+void Matrix::load(std::istream& in) {
+  in.read((char*) &m_, sizeof(int64_t));
+  in.read((char*) &n_, sizeof(int64_t));
   delete[] data_;
   data_ = new real[m_ * n_];
-  ifs.read((char*) data_, m_ * n_ * sizeof(real));
+  in.read((char*) data_, m_ * n_ * sizeof(real));
 }
