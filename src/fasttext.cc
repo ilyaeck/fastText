@@ -212,8 +212,10 @@ void trainThread(Dictionary& dict, Matrix& input, Matrix& output,
 
   Model model(input, output, args.dim, args.lr, threadId);
   if (args.model == model_name::sup) {
+    // supervised learning --> prediction targets are labels
     model.setTargetCounts(dict.getCounts(entry_type::label));
   } else {
+    // prediction targets are words
     model.setTargetCounts(dict.getCounts(entry_type::word));
   }
 
@@ -223,10 +225,11 @@ void trainThread(Dictionary& dict, Matrix& input, Matrix& output,
   int32_t nexamples = 0;
   std::vector<int32_t> line, labels;
   while (info::allWords < args.epoch * ntokens) {
+    // process line by line
     tokenCount += dict.getLine(ifs, line, labels, model.rng);
     if (args.model == model_name::sup) {
-      dict.addNgrams(line, args.wordNgrams);
-      supervised(model, line, labels, loss, nexamples);
+      dict.addNgrams(line, args.wordNgrams);  // update dictionary
+      supervised(model, line, labels, loss, nexamples);  // update model with new example 
     } else if (args.model == model_name::cbow) {
       cbow(dict, model, line, loss, nexamples);
     } else if (args.model == model_name::sg) {
@@ -328,9 +331,13 @@ void printVectors(int argc, char** argv) {
   exit(0);
 }
 
+/*
+ * Train either a supervised classifier or an unsupervised CBOW or SkipGram model
+ */
 void train(int argc, char** argv) {
   args.parseArgs(argc, argv);
 
+  // Load dictionary from file
   Dictionary dict;
   std::ifstream ifs(args.input);
   if (!ifs.is_open()) {
@@ -340,6 +347,7 @@ void train(int argc, char** argv) {
   dict.readFromFile(ifs);
   ifs.close();
 
+  // Init input/output matrices
   Matrix input(dict.nwords() + args.bucket, args.dim);
   Matrix output;
   if (args.model == model_name::sup) {
@@ -350,6 +358,7 @@ void train(int argc, char** argv) {
   input.uniform(1.0 / args.dim);
   output.zero();
 
+  // Kick off training threads: trainThread() has the actual logic.
   info::start = clock();
   time_t t0 = time(nullptr);
   std::vector<std::thread> threads;

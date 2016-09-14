@@ -60,6 +60,7 @@ void Matrix::uniform(real a) {
   }
 }
 
+// Add 'vec' scaled by 'a' to row 'i'
 void Matrix::addRow(const Vector& vec, int64_t i, real a) {
   assert(i >= 0 && i < m_ && vec.m_ == n_);
   for (int64_t j = 0; j < n_; j++) {

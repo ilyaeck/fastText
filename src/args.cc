@@ -22,7 +22,7 @@ Args::Args() {
   neg = 5;
   wordNgrams = 1;
   loss = loss_name::ns;
-  model = model_name::sg;
+  model = model_name::sg; // SkipGram by default
   bucket = 2000000;
   minn = 3;
   maxn = 6;

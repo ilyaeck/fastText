@@ -12,8 +12,8 @@
 
 #include <string>
 
-enum class model_name : int {cbow=1, sg, sup};
-enum class loss_name : int {hs=1, ns, softmax};
+enum class model_name : int {cbow=1, sg, sup}; // Is this a CBOW, SkipGram or a supervised model?
+enum class loss_name : int {hs=1, ns, softmax}; // Hierarchical softmax, negative sampling  or softmax
 
 class Args {
   public:

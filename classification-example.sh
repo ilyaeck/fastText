@@ -20,7 +20,7 @@ normalize_text() {
 }
 
 RESULTDIR=result
-DATADIR=data
+DATADIR=/Users/IE/Copy/data
 
 mkdir -p "${RESULTDIR}"
 mkdir -p "${DATADIR}"
