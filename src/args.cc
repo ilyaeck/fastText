@@ -14,6 +14,8 @@
 
 #include <iostream>
 
+namespace fasttext {
+
 Args::Args() {
   lr = 0.05;
   dim = 100;
@@ -32,6 +34,7 @@ Args::Args() {
   t = 1e-4;
   label = "__label__";
   verbose = 2;
+  pretrainedVectors = "";
 }
 
 void Args::parseArgs(int argc, char** argv) {
@@ -105,6 +108,8 @@ void Args::parseArgs(int argc, char** argv) {
       label = std::string(argv[ai + 1]);
     } else if (strcmp(argv[ai], "-verbose") == 0) {
       verbose = atoi(argv[ai + 1]);
+    } else if (strcmp(argv[ai], "-pretrainedVectors") == 0) {
+      pretrainedVectors = std::string(argv[ai + 1]);
     } else {
       std::cout << "Unknown argument: " << argv[ai] << std::endl;
       printHelp();
@@ -123,28 +128,32 @@ void Args::parseArgs(int argc, char** argv) {
 }
 
 void Args::printHelp() {
+  std::string lname = "ns";
+  if (loss == loss_name::hs) lname = "hs";
+  if (loss == loss_name::softmax) lname = "softmax";
   std::cout
     << "\n"
     << "The following arguments are mandatory:\n"
-    << "  -input        training file path\n"
-    << "  -output       output file path\n\n"
+    << "  -input              training file path\n"
+    << "  -output             output file path\n\n"
     << "The following arguments are optional:\n"
-    << "  -lr           learning rate [" << lr << "]\n"
-    << "  -lrUpdateRate change the rate of updates for the learning rate [" << lrUpdateRate << "]\n"
-    << "  -dim          size of word vectors [" << dim << "]\n"
-    << "  -ws           size of the context window [" << ws << "]\n"
-    << "  -epoch        number of epochs [" << epoch << "]\n"
-    << "  -minCount     minimal number of word occurences [" << minCount << "]\n"
-    << "  -neg          number of negatives sampled [" << neg << "]\n"
-    << "  -wordNgrams   max length of word ngram [" << wordNgrams << "]\n"
-    << "  -loss         loss function {ns, hs, softmax} [ns]\n"
-    << "  -bucket       number of buckets [" << bucket << "]\n"
-    << "  -minn         min length of char ngram [" << minn << "]\n"
-    << "  -maxn         max length of char ngram [" << maxn << "]\n"
-    << "  -thread       number of threads [" << thread << "]\n"
-    << "  -t            sampling threshold [" << t << "]\n"
-    << "  -label        labels prefix [" << label << "]\n"
-    << "  -verbose      verbosity level [" << verbose << "]\n"
+    << "  -lr                 learning rate [" << lr << "]\n"
+    << "  -lrUpdateRate       change the rate of updates for the learning rate [" << lrUpdateRate << "]\n"
+    << "  -dim                size of word vectors [" << dim << "]\n"
+    << "  -ws                 size of the context window [" << ws << "]\n"
+    << "  -epoch              number of epochs [" << epoch << "]\n"
+    << "  -minCount           minimal number of word occurences [" << minCount << "]\n"
+    << "  -neg                number of negatives sampled [" << neg << "]\n"
+    << "  -wordNgrams         max length of word ngram [" << wordNgrams << "]\n"
+    << "  -loss               loss function {ns, hs, softmax} [ns]\n"
+    << "  -bucket             number of buckets [" << bucket << "]\n"
+    << "  -minn               min length of char ngram [" << minn << "]\n"
+    << "  -maxn               max length of char ngram [" << maxn << "]\n"
+    << "  -thread             number of threads [" << thread << "]\n"
+    << "  -t                  sampling threshold [" << t << "]\n"
+    << "  -label              labels prefix [" << label << "]\n"
+    << "  -verbose            verbosity level [" << verbose << "]\n"
+    << "  -pretrainedVectors  pretrained word vectors for supervised learning []"
     << std::endl;
 }
 
@@ -178,4 +187,6 @@ void Args::load(std::istream& in) {
   in.read((char*) &(maxn), sizeof(int));
   in.read((char*) &(lrUpdateRate), sizeof(int));
   in.read((char*) &(t), sizeof(double));
+}
+
 }

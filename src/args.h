@@ -14,8 +14,15 @@
 #include <ostream>
 #include <string>
 
+<<<<<<< HEAD
 enum class model_name : int {cbow=1, sg, sup}; // Is this a CBOW, SkipGram or a supervised model?
 enum class loss_name : int {hs=1, ns, softmax}; // Hierarchical softmax, negative sampling  or softmax
+=======
+namespace fasttext {
+
+enum class model_name : int {cbow=1, sg, sup};
+enum class loss_name : int {hs=1, ns, softmax};
+>>>>>>> facebookresearch/master
 
 class Args {
   public:
@@ -40,11 +47,14 @@ class Args {
     double t;
     std::string label;
     int verbose;
+    std::string pretrainedVectors;
 
     void parseArgs(int, char**);
     void printHelp();
     void save(std::ostream&);
     void load(std::istream&);
 };
+
+}
 
 #endif
