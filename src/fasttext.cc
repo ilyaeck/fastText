@@ -271,7 +271,7 @@ void FastText::trainThread(int32_t threadId) {
     tokenCount += dict.getLine(ifs, line, labels, model.rng);
     if (args.model == model_name::sup) {
       dict.addNgrams(line, args.wordNgrams);  // update dictionary
-      supervised(model, line, labels, loss, nexamples);  // update model with new example 
+      supervised(model, line, labels, loss, nexamples);  // update model with new example
     } else if (args.model == model_name::cbow) {
       cbow(dict, model, line, loss, nexamples);
     } else if (args.model == model_name::sg) {
